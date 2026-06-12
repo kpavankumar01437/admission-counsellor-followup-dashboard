@@ -1,0 +1,87 @@
+{
+  "info": {
+    "name": "Admission Counsellor Follow-up Dashboard",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api" },
+    { "key": "token", "value": "" },
+    { "key": "leadId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@firstcryintellitots.com\",\n  \"password\": \"Admin@123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Lead",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{baseUrl}}/leads",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"parent_name\": \"Test Parent\",\n  \"parent_phone\": \"9999999999\",\n  \"child_name\": \"Test Child\",\n  \"child_age\": 3,\n  \"program_interest\": \"Nursery\",\n  \"source\": \"phone\"\n}"
+        }
+      }
+    },
+    {
+      "name": "List Leads With Filters",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/leads?status=new&priority=high"
+      }
+    },
+    {
+      "name": "Log Follow-up",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{baseUrl}}/leads/{{leadId}}/followup",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"outcome\": \"answered\",\n  \"status_changed_to\": \"contacted\",\n  \"notes\": \"Parent asked for demo timing\",\n  \"next_follow_up_date\": \"2026-06-13\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Analytics Summary",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/analytics/summary"
+      }
+    },
+    {
+      "name": "Funnel Data",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/analytics/funnel"
+      }
+    },
+    {
+      "name": "Call Script",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/ai/call-script/{{leadId}}"
+      }
+    }
+  ]
+}
