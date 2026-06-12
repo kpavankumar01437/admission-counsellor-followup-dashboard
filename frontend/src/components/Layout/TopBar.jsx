@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Plus, Search } from "lucide-react";
@@ -7,6 +7,7 @@ import { getNotifications, markNotificationRead } from "../../services/api";
 const TopBar = ({ title }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const notificationRef = useRef(null);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -38,9 +39,38 @@ const TopBar = ({ title }) => {
     return () => clearTimeout(timeout);
   }, [search, navigate]);
 
-  const handleRead = async (id) => {
-    await markNotificationRead(id);
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const closeOnOutsideClick = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [open]);
+
+  const handleNotificationClick = async (notification) => {
+    await markNotificationRead(notification.id);
     queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    setOpen(false);
+
+    if (notification.lead_id) {
+      navigate(`/leads/${notification.lead_id}`);
+    }
   };
 
   return (
@@ -71,12 +101,13 @@ const TopBar = ({ title }) => {
             Quick Add Lead
           </button>
 
-          <div className="relative">
+          <div ref={notificationRef} className="relative z-50">
             <button
               type="button"
               onClick={() => setOpen((value) => !value)}
               className="relative rounded-md border border-slate-300 bg-white p-2 text-slate-700 hover:bg-slate-50"
               aria-label="Notifications"
+              aria-expanded={open}
             >
               <Bell className="h-5 w-5" />
               {unread > 0 && (
@@ -86,8 +117,11 @@ const TopBar = ({ title }) => {
               )}
             </button>
             {open && (
-              <div className="absolute right-0 mt-2 w-80 rounded-lg border border-slate-200 bg-white p-2 shadow-xl">
-                <div className="border-b border-slate-100 px-2 py-2 text-sm font-semibold text-slate-900">Notifications</div>
+              <div className="absolute right-0 top-full z-50 mt-2 w-[calc(100vw-2rem)] max-w-sm rounded-lg border border-slate-200 bg-white p-2 shadow-xl sm:w-96">
+                <div className="flex items-center justify-between border-b border-slate-100 px-2 py-2">
+                  <p className="text-sm font-semibold text-slate-900">Notifications</p>
+                  <p className="text-xs text-slate-500">{unread} unread</p>
+                </div>
                 <div className="max-h-80 overflow-auto">
                   {notifications.length === 0 ? (
                     <p className="p-4 text-sm text-slate-500">No notifications.</p>
@@ -96,13 +130,14 @@ const TopBar = ({ title }) => {
                       <button
                         type="button"
                         key={notification.id}
-                        onClick={() => handleRead(notification.id)}
+                        onClick={() => handleNotificationClick(notification)}
                         className={`w-full rounded-md p-3 text-left text-sm hover:bg-slate-50 ${
                           notification.is_read ? "text-slate-500" : "bg-indigo-50 text-slate-900"
                         }`}
                       >
                         <p className="font-medium">{notification.message}</p>
                         <p className="mt-1 text-xs text-slate-500">{new Date(notification.created_at).toLocaleString()}</p>
+                        {notification.lead_id && <p className="mt-2 text-xs font-semibold text-indigo-700">Open lead</p>}
                       </button>
                     ))
                   )}
