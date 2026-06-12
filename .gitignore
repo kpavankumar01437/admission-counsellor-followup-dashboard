@@ -6,5 +6,8 @@ dist/
 npm-debug.log*
 coverage/
 *.pid
+.mysql-data/
+.mysql-config/
+.mysql.pid
 .DS_Store
 Thumbs.db
