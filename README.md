@@ -52,6 +52,14 @@ Then run this inside the MySQL prompt:
 source C:/Users/kpava/Downloads/OPENAIHACKATHON/admission-dashboard/backend/db/schema.sql;
 ```
 
+If PowerShell says `mysql is not recognized`, MySQL is not installed locally or the MySQL `bin` folder is not in PATH. Use Railway's MySQL query editor instead, or install MySQL Server first:
+
+```powershell
+winget install Oracle.MySQL
+```
+
+After installing MySQL, open a new PowerShell window and rerun the schema import command.
+
 Seed users:
 
 - Admin: `admin@firstcryintellitots.com` / `Admin@123`
