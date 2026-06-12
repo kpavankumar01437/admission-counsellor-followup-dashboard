@@ -31,7 +31,25 @@ Full-stack internship project for FirstCry Intellitots admission follow-up manag
 Create MySQL database and run:
 
 ```powershell
+Get-Content .\backend\db\schema.sql | mysql -u root -p
+```
+
+If you prefer using Command Prompt instead of PowerShell:
+
+```cmd
 mysql -u root -p < backend\db\schema.sql
+```
+
+Another PowerShell-safe option is to open MySQL first:
+
+```powershell
+mysql -u root -p
+```
+
+Then run this inside the MySQL prompt:
+
+```sql
+source C:/Users/kpava/Downloads/OPENAIHACKATHON/admission-dashboard/backend/db/schema.sql;
 ```
 
 Seed users:
