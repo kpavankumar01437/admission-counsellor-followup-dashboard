@@ -5,5 +5,6 @@ dist/
 .env.*.local
 npm-debug.log*
 coverage/
+*.pid
 .DS_Store
 Thumbs.db

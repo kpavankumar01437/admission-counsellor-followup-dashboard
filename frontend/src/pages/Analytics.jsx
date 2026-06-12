@@ -6,7 +6,6 @@ import {
   CartesianGrid,
   Line,
   LineChart,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis
@@ -14,6 +13,7 @@ import {
 import { Download } from "lucide-react";
 import { getAnalyticsFunnel, getCounsellorStats, getMonthlyTrend } from "../services/api";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
+import ChartFrame from "../components/Common/ChartFrame";
 
 const conversionClass = (value) => {
   if (value > 30) return "text-emerald-700 bg-emerald-50";
@@ -103,31 +103,35 @@ const Analytics = () => {
       <div className="grid gap-6 xl:grid-cols-2">
         <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="text-lg font-bold text-slate-950">Funnel Visualization</h2>
-          <div className="mt-4 h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={funnelQuery.data || []} layout="vertical" margin={{ left: 35 }}>
+          <div className="mt-4">
+            <ChartFrame>
+              {({ width, height }) => (
+              <BarChart width={width} height={height} data={funnelQuery.data || []} layout="vertical" margin={{ left: 35 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                 <XAxis type="number" allowDecimals={false} />
                 <YAxis type="category" dataKey="label" width={120} />
                 <Tooltip />
                 <Bar dataKey="count" fill="#4F46E5" radius={[0, 6, 6, 0]} />
               </BarChart>
-            </ResponsiveContainer>
+              )}
+            </ChartFrame>
           </div>
         </section>
 
         <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="text-lg font-bold text-slate-950">Monthly Trend</h2>
-          <div className="mt-4 h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={monthlyQuery.data || []}>
+          <div className="mt-4">
+            <ChartFrame>
+              {({ width, height }) => (
+              <LineChart width={width} height={height} data={monthlyQuery.data || []}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="label" />
                 <YAxis allowDecimals={false} />
                 <Tooltip />
                 <Line type="monotone" dataKey="count" stroke="#10B981" strokeWidth={3} />
               </LineChart>
-            </ResponsiveContainer>
+              )}
+            </ChartFrame>
           </div>
         </section>
       </div>

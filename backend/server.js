@@ -2,19 +2,9 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-const authRoutes = require("./routes/auth");
-const leadsRoutes = require("./routes/leads");
-const followupsRoutes = require("./routes/followups");
-const toursRoutes = require("./routes/tours");
-const analyticsRoutes = require("./routes/analytics");
-const enquiryRoutes = require("./routes/enquiry");
-const aiRoutes = require("./routes/ai");
-const counsellorsRoutes = require("./routes/counsellors");
-const notificationsRoutes = require("./routes/notifications");
-const { startNotificationService } = require("./services/notificationService");
-
 const app = express();
 const PORT = process.env.PORT || 5000;
+const isDemoMode = process.env.DEMO_MODE === "true";
 
 const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:5173")
   .split(",")
@@ -48,15 +38,30 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/leads", leadsRoutes);
-app.use("/api", followupsRoutes);
-app.use("/api/tours", toursRoutes);
-app.use("/api/analytics", analyticsRoutes);
-app.use("/api/enquiry", enquiryRoutes);
-app.use("/api/ai", aiRoutes);
-app.use("/api/counsellors", counsellorsRoutes);
-app.use("/api/notifications", notificationsRoutes);
+if (isDemoMode) {
+  const demoRoutes = require("./routes/demo");
+  app.use("/api", demoRoutes);
+} else {
+  const authRoutes = require("./routes/auth");
+  const leadsRoutes = require("./routes/leads");
+  const followupsRoutes = require("./routes/followups");
+  const toursRoutes = require("./routes/tours");
+  const analyticsRoutes = require("./routes/analytics");
+  const enquiryRoutes = require("./routes/enquiry");
+  const aiRoutes = require("./routes/ai");
+  const counsellorsRoutes = require("./routes/counsellors");
+  const notificationsRoutes = require("./routes/notifications");
+
+  app.use("/api/auth", authRoutes);
+  app.use("/api/leads", leadsRoutes);
+  app.use("/api", followupsRoutes);
+  app.use("/api/tours", toursRoutes);
+  app.use("/api/analytics", analyticsRoutes);
+  app.use("/api/enquiry", enquiryRoutes);
+  app.use("/api/ai", aiRoutes);
+  app.use("/api/counsellors", counsellorsRoutes);
+  app.use("/api/notifications", notificationsRoutes);
+}
 
 app.use((req, res) => {
   res.status(404).json({ success: false, error: "Route not found" });
@@ -73,5 +78,10 @@ app.use((error, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`Admission dashboard API running on port ${PORT}`);
-  startNotificationService();
+  if (isDemoMode) {
+    console.log("DEMO_MODE=true: using in-memory demo data. Configure MySQL and set DEMO_MODE=false for production.");
+  } else {
+    const { startNotificationService } = require("./services/notificationService");
+    startNotificationService();
+  }
 });
