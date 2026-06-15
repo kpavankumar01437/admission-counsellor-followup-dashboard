@@ -6,6 +6,7 @@ import {
   Home,
   LogOut,
   Menu,
+  Network,
   School,
   UserCog,
   Users,
@@ -18,6 +19,7 @@ const baseLinks = [
   { to: "/leads", label: "Leads", icon: ClipboardList },
   { to: "/follow-ups", label: "Follow-ups", icon: Users },
   { to: "/tours", label: "Tours", icon: CalendarDays },
+  { to: "/operations", label: "Operations", icon: Network },
   { to: "/analytics", label: "Analytics", icon: BarChart3 }
 ];
 

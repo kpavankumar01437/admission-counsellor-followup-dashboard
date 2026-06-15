@@ -4,7 +4,7 @@
 
 | ID | Test | Expected Result | Status |
 |---|---|---|---|
-| FT-01 | Public enquiry form submits successfully | Lead created with `new` status | Pending manual |
+| FT-01 | Parent login with email works | Parent session saved and enquiry page opens | Passed local |
 | FT-02 | Counsellor login works with correct credentials | JWT token stored, dashboard opens | Pending manual |
 | FT-03 | Login fails with wrong password | Error toast shown | Pending manual |
 | FT-04 | JWT token expires | User redirects to login | Pending manual |
@@ -17,6 +17,13 @@
 | FT-11 | Notifications appear | Bell shows unread count | Pending manual |
 | FT-12 | Admin assigns counsellor | Lead owner changes | Pending manual |
 | FT-13 | Overdue leads highlighted | Red alert panel shows overdue leads | Pending manual |
+| FT-14 | Parent enquiry form submits successfully | Lead created with `new` status | Passed local |
+| FT-15 | Parent portal update submits successfully | `parent-portal` workflow record appears in Operations | Passed local |
+| FT-16 | Operations page loads workflow summary | Records, seats, referrals, and recommendations render | Passed local |
+| FT-17 | Teacher/daycare/classroom workflow record saves | New `workflow_events` row appears in action history | Pending manual |
+| FT-18 | Seat availability updates | Program seat count updates without duplicate row | Pending manual |
+| FT-19 | Referral tracking saves | New referral appears in referral history | Pending manual |
+| FT-20 | Rule-based recommendations load | Recommendations panel shows priority actions | Passed local |
 
 ## Edge Case Tests
 
@@ -28,3 +35,5 @@
 | ET-04 | Delete lead with history | Not implemented in current scope | N/A |
 | ET-05 | Empty dashboard state | Empty message appears without crash | Pending manual |
 | ET-06 | Mobile responsive layout | Sidebar collapses to hamburger | Pending manual |
+| ET-07 | Parent login with invalid email | Validation error shown | Pending manual |
+| ET-08 | Seat filled count greater than total seats | Backend returns validation error | Pending manual |

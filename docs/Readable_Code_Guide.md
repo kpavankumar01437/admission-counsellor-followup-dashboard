@@ -14,9 +14,14 @@ Before this system, parent enquiries could be scattered across calls, WhatsApp, 
 - Lead list and filters
 - Follow-up history
 - Demo tour booking
+- Seat availability tracking
+- Referral tracking
+- Teacher/daycare/classroom workflow records
+- Parent portal updates
 - Overdue follow-up alerts
 - Counsellor performance analytics
 - Rule-based AI call script
+- Rule-based operational recommendations
 
 ## 2. Main User Roles
 
@@ -35,6 +40,14 @@ After email login, the parent is redirected to the enquiry page:
 ```
 
 They submit details like parent name, phone number, child name, child age, and program interest. The parent email is prefilled from the login session.
+
+The parent can also use:
+
+```text
+/parent-portal
+```
+
+This is used for child detail updates, daycare routine preferences, and admission-related notes.
 
 ### Counsellor
 
@@ -55,6 +68,10 @@ The admin can see everything:
 - Analytics
 - Notifications
 - Counsellor management
+- School operations workflow
+- Seat availability
+- Referrals
+- Parent portal updates
 
 ## 3. Folder Structure
 
@@ -99,10 +116,11 @@ backend/
 | `routes/ai.js` | Call script, follow-up message, priority recalculation |
 | `routes/counsellors.js` | Admin counsellor management |
 | `routes/notifications.js` | Notification list and mark-as-read |
+| `routes/operations.js` | Teacher, daycare, classroom, parent portal, seats, referrals, and recommendations |
 
 ## 5. Database Explanation
 
-The database has 8 main tables.
+The database has 11 main tables.
 
 | Table | Purpose |
 |---|---|
@@ -114,6 +132,9 @@ The database has 8 main tables.
 | `tour_bookings` | Connects leads to tour slots |
 | `admissions` | Stores final converted admission records |
 | `notifications` | Stores alerts for due and overdue follow-ups |
+| `workflow_events` | Stores updates from parent portal, teacher dashboard, daycare, classroom, admin, and counsellor screens |
+| `seat_availability` | Stores available seats by program and academic year |
+| `referrals` | Stores referred parent enquiries and reward status |
 
 The most important table is `leads`, because every parent enquiry starts there.
 
@@ -142,11 +163,13 @@ frontend/src/
 |---|---|
 | `Login.jsx` | Counsellor/admin login |
 | `ParentLogin.jsx` | Parent email login before enquiry |
+| `ParentPortal.jsx` | Parent updates after login |
 | `Dashboard.jsx` | Summary cards, charts, follow-ups, command center |
 | `Leads.jsx` | Lead table, filters, new lead modal, CSV import |
 | `LeadDetail.jsx` | Lead profile, timeline, call script, tour booking |
 | `Enquiry.jsx` | Public parent enquiry form |
 | `Tours.jsx` | Demo tour slot calendar |
+| `Operations.jsx` | Workflow events, seats, referrals, and recommendations |
 | `Analytics.jsx` | Counsellor stats and charts |
 | `FollowUps.jsx` | Due today and overdue follow-up queues |
 | `Counsellors.jsx` | Admin-only counsellor management |
@@ -159,6 +182,8 @@ Parent logs in with email
 Parent submits enquiry
         ↓
 Lead is created in MySQL
+        ↓
+Parent/teacher/admin/counsellor updates are saved as workflow events
         ↓
 Counsellor logs in
         ↓
@@ -173,6 +198,8 @@ Parent visits centre
 Lead becomes admitted or lost
         ↓
 Admin checks analytics and performance
+        ↓
+Centre team checks Operations for seats, referrals, parent updates, and recommended actions
 ```
 
 ## 8. Rule-Based AI Layer
@@ -190,6 +217,7 @@ does three useful things:
 - Generates a call script for counsellors
 - Generates a WhatsApp-style follow-up message
 - Calculates lead priority as high, medium, or low
+- Generates operational recommendations from leads, seat availability, referrals, and workflow events
 
 The AI logic is rule-based, so it is easy to explain in review.
 

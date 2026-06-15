@@ -82,4 +82,15 @@ export const markNotificationRead = (id) => unwrap(api.patch(`/notifications/${i
 export const markAllNotificationsRead = () => unwrap(api.patch("/notifications/read-all"));
 export const scanNotifications = () => unwrap(api.post("/notifications/scan"));
 
+export const getOperationsSummary = () => unwrap(api.get("/operations/summary"));
+export const getWorkflowEvents = (params = {}) => unwrap(api.get("/operations/events", { params }));
+export const createWorkflowEvent = (payload) => unwrap(api.post("/operations/events", payload));
+export const updateWorkflowEventStatus = (id, status) => unwrap(api.patch(`/operations/events/${id}/status`, { status }));
+export const submitParentPortalUpdate = (payload) => unwrap(api.post("/operations/parent-update", payload));
+export const getSeatAvailability = () => unwrap(api.get("/operations/seat-availability"));
+export const saveSeatAvailability = (payload) => unwrap(api.post("/operations/seat-availability", payload));
+export const getReferrals = () => unwrap(api.get("/operations/referrals"));
+export const createReferral = (payload) => unwrap(api.post("/operations/referrals", payload));
+export const getOperationalRecommendations = () => unwrap(api.get("/operations/recommendations"));
+
 export default api;

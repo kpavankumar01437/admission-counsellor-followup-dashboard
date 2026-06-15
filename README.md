@@ -13,15 +13,20 @@ Full-stack internship project for FirstCry Intellitots admission follow-up manag
 
 ## Features
 
-- Public parent enquiry form
+- Parent email login
+- Parent enquiry form
+- Parent portal update screen
 - Counsellor/admin login
 - Lead funnel tracking: new, contacted, demo scheduled, demo visited, follow-up, admitted, lost
 - Follow-up logging with history timeline
 - Demo tour slot creation and booking
+- Teacher, daycare, classroom, centre admin, and counsellor workflow records
+- Seat availability tracking
+- Referral tracking
 - Overdue and due-today follow-up alerts
 - Counsellor performance analytics
 - Funnel and monthly trend charts
-- Rule-based AI call scripts and priority recalculation
+- Rule-based AI call scripts, priority recalculation, and operational recommendations
 - CSV lead import
 
 ## Local Setup

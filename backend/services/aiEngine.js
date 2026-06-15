@@ -123,10 +123,66 @@ const generateAdmissionSummary = (lead, followUps = [], admission = null) => {
   return `${parent}'s enquiry for ${child} in ${program} is ${finalStatus}. The counsellor logged ${calls} interaction${calls === 1 ? "" : "s"} from first enquiry to the current stage${amount}. Key notes should be reviewed in the follow-up timeline before the next centre-head review.`;
 };
 
+const generateOperationalRecommendations = ({ leads = [], seats = [], events = [], referrals = [] }) => {
+  const recommendations = [];
+
+  const urgentLeads = leads.filter((lead) => lead.priority === "high" && ACTIVE_STATUSES.includes(lead.status));
+  if (urgentLeads.length) {
+    recommendations.push({
+      type: "follow-up",
+      priority: "high",
+      title: `${urgentLeads.length} high-priority admission lead${urgentLeads.length === 1 ? "" : "s"} need action`,
+      message: `Start with ${urgentLeads[0].parent_name}. Their lead is at ${urgentLeads[0].status.replace(/-/g, " ")} stage.`
+    });
+  }
+
+  const tightSeatPrograms = seats.filter((seat) => Number(seat.total_seats || 0) - Number(seat.filled_seats || 0) <= 3);
+  if (tightSeatPrograms.length) {
+    recommendations.push({
+      type: "seat-availability",
+      priority: "high",
+      title: "Limited seats need faster closure",
+      message: `${tightSeatPrograms.map((seat) => seat.program).join(", ")} have 3 or fewer seats remaining. Prioritize demo-visited leads for these programs.`
+    });
+  }
+
+  const actionEvents = events.filter((event) => event.status === "action-needed");
+  if (actionEvents.length) {
+    recommendations.push({
+      type: "operations",
+      priority: "medium",
+      title: `${actionEvents.length} school operation item${actionEvents.length === 1 ? "" : "s"} need review`,
+      message: `Latest action item: ${actionEvents[0].title}. Assign an owner or mark it completed after review.`
+    });
+  }
+
+  const openReferrals = referrals.filter((referral) => ["new", "contacted"].includes(referral.status));
+  if (openReferrals.length) {
+    recommendations.push({
+      type: "referral",
+      priority: "medium",
+      title: "Referral follow-up opportunity",
+      message: `${openReferrals.length} referral${openReferrals.length === 1 ? "" : "s"} can be followed up to improve admission conversion.`
+    });
+  }
+
+  if (!recommendations.length) {
+    recommendations.push({
+      type: "system",
+      priority: "low",
+      title: "Workflow is stable",
+      message: "No urgent operational gaps detected. Continue monitoring new enquiries, demo visits, and follow-up queues."
+    });
+  }
+
+  return recommendations;
+};
+
 module.exports = {
   generateCallScript,
   calculatePriority,
   calculatePriorityDetails,
   generateFollowUpMessage,
-  generateAdmissionSummary
+  generateAdmissionSummary,
+  generateOperationalRecommendations
 };

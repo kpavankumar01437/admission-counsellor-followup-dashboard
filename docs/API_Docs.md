@@ -67,6 +67,21 @@ Supported lead filters: `status`, `counsellor_id`, `priority`, `date_from`, `dat
 | PATCH | `/notifications/:id/read` | Yes | Mark one read |
 | PATCH | `/notifications/read-all` | Yes | Mark all read |
 
+## Operations Workflow
+
+| Method | Endpoint | Auth | Purpose |
+|---|---|---|---|
+| GET | `/operations/summary` | Yes | Workflow, seat, and referral summary |
+| GET | `/operations/events` | Yes | Action history from all source screens |
+| POST | `/operations/events` | Yes | Create teacher/daycare/classroom/admin/counsellor workflow record |
+| PATCH | `/operations/events/:id/status` | Yes | Update workflow record status |
+| POST | `/operations/parent-update` | No | Parent portal update |
+| GET | `/operations/seat-availability` | Yes | Seat availability table |
+| POST | `/operations/seat-availability` | Yes | Create or update program seats |
+| GET | `/operations/referrals` | Yes | Referral list |
+| POST | `/operations/referrals` | Yes | Create referral record |
+| GET | `/operations/recommendations` | Yes | Rule-based recommendations |
+
 Response shape:
 
 ```json

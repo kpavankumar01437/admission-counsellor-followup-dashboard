@@ -10,6 +10,9 @@ DROP TABLE IF EXISTS admissions;
 DROP TABLE IF EXISTS tour_bookings;
 DROP TABLE IF EXISTS tour_slots;
 DROP TABLE IF EXISTS follow_ups;
+DROP TABLE IF EXISTS referrals;
+DROP TABLE IF EXISTS seat_availability;
+DROP TABLE IF EXISTS workflow_events;
 DROP TABLE IF EXISTS leads;
 DROP TABLE IF EXISTS parents;
 DROP TABLE IF EXISTS counsellors;
@@ -78,6 +81,58 @@ CREATE TABLE follow_ups (
   INDEX idx_followups_counsellor (counsellor_id),
   FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE,
   FOREIGN KEY (counsellor_id) REFERENCES counsellors(id) ON DELETE CASCADE
+);
+
+CREATE TABLE workflow_events (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  source ENUM('parent-enquiry', 'teacher-dashboard', 'centre-admin-panel', 'daycare-routine', 'classroom-activity', 'parent-portal', 'counsellor-follow-up') NOT NULL,
+  lead_id INT,
+  parent_email VARCHAR(100),
+  child_name VARCHAR(100),
+  title VARCHAR(150) NOT NULL,
+  details TEXT,
+  status ENUM('new', 'in-review', 'action-needed', 'completed') DEFAULT 'new',
+  priority ENUM('high', 'medium', 'low') DEFAULT 'medium',
+  owner_type ENUM('parent', 'teacher', 'counsellor', 'admin', 'centre_head') DEFAULT 'admin',
+  owner_id INT,
+  created_by INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_workflow_source (source),
+  INDEX idx_workflow_status_priority (status, priority),
+  INDEX idx_workflow_parent_email (parent_email),
+  FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE SET NULL,
+  FOREIGN KEY (created_by) REFERENCES counsellors(id) ON DELETE SET NULL
+);
+
+CREATE TABLE seat_availability (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  program VARCHAR(100) NOT NULL,
+  academic_year VARCHAR(20) NOT NULL,
+  total_seats INT NOT NULL DEFAULT 0,
+  filled_seats INT NOT NULL DEFAULT 0,
+  updated_by INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_seat_program_year (program, academic_year),
+  FOREIGN KEY (updated_by) REFERENCES counsellors(id) ON DELETE SET NULL
+);
+
+CREATE TABLE referrals (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  lead_id INT,
+  referred_parent_name VARCHAR(100) NOT NULL,
+  referred_parent_phone VARCHAR(15),
+  referred_child_name VARCHAR(100),
+  referral_source VARCHAR(100),
+  status ENUM('new', 'contacted', 'converted', 'closed') DEFAULT 'new',
+  reward_status ENUM('not-applicable', 'pending', 'issued') DEFAULT 'not-applicable',
+  created_by INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_referrals_status (status),
+  FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE SET NULL,
+  FOREIGN KEY (created_by) REFERENCES counsellors(id) ON DELETE SET NULL
 );
 
 CREATE TABLE tour_slots (
@@ -156,6 +211,25 @@ VALUES
   (3, 3, DATE_SUB(NOW(), INTERVAL 2 DAY), 8, 'interested', 'demo-scheduled', 'Parent agreed to centre tour.', 'Confirm demo timing', DATE_ADD(CURDATE(), INTERVAL 2 DAY)),
   (4, 3, DATE_SUB(NOW(), INTERVAL 4 DAY), 12, 'answered', 'demo-visited', 'Parent liked curriculum, fee concern pending.', 'Close admission', DATE_SUB(CURDATE(), INTERVAL 1 DAY)),
   (5, 2, DATE_SUB(NOW(), INTERVAL 8 DAY), 10, 'admitted', 'admitted', 'Admission confirmed.', 'Collect remaining documents', NULL);
+
+INSERT INTO workflow_events
+  (source, lead_id, parent_email, child_name, title, details, status, priority, owner_type, owner_id, created_by)
+VALUES
+  ('parent-enquiry', 1, 'ananya.rao@example.com', 'Ishaan', 'Website enquiry received', 'Parent requested nursery fee details.', 'action-needed', 'high', 'counsellor', 2, 2),
+  ('daycare-routine', 2, 'rahul.nair@example.com', 'Mira', 'Routine preference shared', 'Parent asked for daycare snack and nap timing details.', 'in-review', 'medium', 'teacher', NULL, 2),
+  ('classroom-activity', 3, 'sneha.kapoor@example.com', 'Kabir', 'Demo classroom activity planned', 'Show playgroup sensory activity during demo visit.', 'new', 'medium', 'teacher', NULL, 3),
+  ('centre-admin-panel', 4, 'vikram.reddy@example.com', 'Aarohi', 'Centre head review needed', 'Fee concern after visit needs centre head approval.', 'action-needed', 'high', 'centre_head', 1, 3);
+
+INSERT INTO seat_availability (program, academic_year, total_seats, filled_seats, updated_by) VALUES
+  ('Playgroup', '2026-27', 20, 11, 1),
+  ('Nursery', '2026-27', 24, 18, 1),
+  ('LKG', '2026-27', 22, 19, 1),
+  ('UKG', '2026-27', 20, 17, 1);
+
+INSERT INTO referrals
+  (lead_id, referred_parent_name, referred_parent_phone, referred_child_name, referral_source, status, reward_status, created_by)
+VALUES
+  (4, 'Existing Parent Referral', '9888800001', 'Riya', 'Vikram Reddy', 'new', 'pending', 3);
 
 INSERT INTO tour_slots (slot_date, slot_time, capacity, booked_count, notes) VALUES
   (CURDATE(), '10:00:00', 5, 0, 'Morning school tour'),

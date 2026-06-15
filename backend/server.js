@@ -51,6 +51,7 @@ if (isDemoMode) {
   const aiRoutes = require("./routes/ai");
   const counsellorsRoutes = require("./routes/counsellors");
   const notificationsRoutes = require("./routes/notifications");
+  const operationsRoutes = require("./routes/operations");
 
   app.use("/api/auth", authRoutes);
   app.use("/api/leads", leadsRoutes);
@@ -61,6 +62,7 @@ if (isDemoMode) {
   app.use("/api/ai", aiRoutes);
   app.use("/api/counsellors", counsellorsRoutes);
   app.use("/api/notifications", notificationsRoutes);
+  app.use("/api/operations", operationsRoutes);
 }
 
 app.use((req, res) => {

@@ -10,16 +10,19 @@ import Dashboard from "./pages/Dashboard";
 import Leads from "./pages/Leads";
 import LeadDetail from "./pages/LeadDetail";
 import Enquiry from "./pages/Enquiry";
+import ParentPortal from "./pages/ParentPortal";
 import Analytics from "./pages/Analytics";
 import Tours from "./pages/Tours";
 import FollowUps from "./pages/FollowUps";
 import Counsellors from "./pages/Counsellors";
+import Operations from "./pages/Operations";
 
 const titleMap = {
   "/dashboard": "Dashboard",
   "/leads": "Leads",
   "/follow-ups": "Follow-ups",
   "/tours": "Tour Calendar",
+  "/operations": "Operations",
   "/analytics": "Analytics",
   "/counsellors": "Counsellors"
 };
@@ -86,6 +89,7 @@ const App = () => {
       <Route path="/parent-login" element={<ParentLogin />} />
       <Route element={<ParentRoute />}>
         <Route path="/enquiry" element={<Enquiry />} />
+        <Route path="/parent-portal" element={<ParentPortal />} />
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
@@ -95,6 +99,7 @@ const App = () => {
           <Route path="/leads/:id" element={<LeadDetail />} />
           <Route path="/follow-ups" element={<FollowUps />} />
           <Route path="/tours" element={<Tours />} />
+          <Route path="/operations" element={<Operations />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route element={<AdminRoute />}>
             <Route path="/counsellors" element={<Counsellors />} />

@@ -113,14 +113,22 @@ const Enquiry = () => {
               <p className="text-sm font-semibold text-indigo-900">Parent session active</p>
               <p className="text-sm text-indigo-700">{parent.email}</p>
             </div>
-            <button
-              type="button"
-              onClick={logoutParent}
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-indigo-200 bg-white px-3 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-100"
-            >
-              <LogOut className="h-4 w-4" />
-              Logout Parent
-            </button>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                to="/parent-portal"
+                className="inline-flex items-center justify-center rounded-md border border-indigo-200 bg-white px-3 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-100"
+              >
+                Parent Portal
+              </Link>
+              <button
+                type="button"
+                onClick={logoutParent}
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-indigo-200 bg-white px-3 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-100"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout Parent
+              </button>
+            </div>
           </div>
         ) : (
           <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
