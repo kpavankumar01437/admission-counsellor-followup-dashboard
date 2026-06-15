@@ -42,6 +42,7 @@ export const getErrorMessage = (error) => {
 };
 
 export const login = (email, password) => unwrap(api.post("/auth/login", { email, password }));
+export const parentLogin = (payload) => unwrap(api.post("/auth/parent-login", payload));
 export const getMe = () => unwrap(api.get("/auth/me"));
 
 export const getLeads = (filters = {}) => unwrap(api.get("/leads", { params: filters }));

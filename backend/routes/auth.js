@@ -49,6 +49,49 @@ router.post(
   }
 );
 
+router.post(
+  "/parent-login",
+  [
+    body("email").isEmail().withMessage("Valid email is required"),
+    body("name").optional({ checkFalsy: true }).trim().isLength({ max: 100 }).withMessage("Name is too long"),
+    body("phone").optional({ checkFalsy: true }).trim().isLength({ max: 15 }).withMessage("Phone number is too long")
+  ],
+  handleValidation,
+  async (req, res) => {
+    try {
+      const email = req.body.email.trim().toLowerCase();
+      const name = req.body.name?.trim() || null;
+      const phone = req.body.phone?.trim() || null;
+
+      await pool.execute(
+        `INSERT INTO parents (name, email, phone, last_login_at)
+         VALUES (?, ?, ?, NOW())
+         ON DUPLICATE KEY UPDATE
+           name = COALESCE(VALUES(name), name),
+           phone = COALESCE(VALUES(phone), phone),
+           last_login_at = NOW()`,
+        [name, email, phone]
+      );
+
+      const [rows] = await pool.execute(
+        "SELECT id, name, email, phone, last_login_at, created_at FROM parents WHERE email = ? LIMIT 1",
+        [email]
+      );
+
+      const parent = rows[0];
+      const token = jwt.sign(
+        { id: parent.id, email: parent.email, role: "parent" },
+        process.env.JWT_SECRET,
+        { expiresIn: "24h" }
+      );
+
+      return res.json({ success: true, data: { token, parent } });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: "Parent login failed" });
+    }
+  }
+);
+
 router.get("/me", verifyToken, (req, res) => {
   return res.json({ success: true, data: req.user });
 });

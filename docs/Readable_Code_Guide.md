@@ -8,6 +8,7 @@ The **Admission Counsellor Follow-up Dashboard** helps FirstCry Intellitots mana
 
 Before this system, parent enquiries could be scattered across calls, WhatsApp, and Excel sheets. This app keeps everything in one place:
 
+- Parent email login
 - Parent enquiry form
 - Counsellor login
 - Lead list and filters
@@ -21,13 +22,19 @@ Before this system, parent enquiries could be scattered across calls, WhatsApp, 
 
 ### Parent
 
-The parent uses the public enquiry page:
+The parent first uses the parent login page:
+
+```text
+/parent-login
+```
+
+After email login, the parent is redirected to the enquiry page:
 
 ```text
 /enquiry
 ```
 
-They submit details like parent name, phone number, child name, child age, and program interest.
+They submit details like parent name, phone number, child name, child age, and program interest. The parent email is prefilled from the login session.
 
 ### Counsellor
 
@@ -95,11 +102,12 @@ backend/
 
 ## 5. Database Explanation
 
-The database has 7 main tables.
+The database has 8 main tables.
 
 | Table | Purpose |
 |---|---|
 | `counsellors` | Stores admin and counsellor accounts |
+| `parents` | Stores parent email login records |
 | `leads` | Stores parent enquiries |
 | `follow_ups` | Stores every call and status change |
 | `tour_slots` | Stores available demo visit slots |
@@ -133,6 +141,7 @@ frontend/src/
 | Page | Purpose |
 |---|---|
 | `Login.jsx` | Counsellor/admin login |
+| `ParentLogin.jsx` | Parent email login before enquiry |
 | `Dashboard.jsx` | Summary cards, charts, follow-ups, command center |
 | `Leads.jsx` | Lead table, filters, new lead modal, CSV import |
 | `LeadDetail.jsx` | Lead profile, timeline, call script, tour booking |
@@ -145,6 +154,8 @@ frontend/src/
 ## 7. Full Flow
 
 ```text
+Parent logs in with email
+        ↓
 Parent submits enquiry
         ↓
 Lead is created in MySQL
@@ -230,8 +241,8 @@ Use this order during review:
 
 1. Show architecture diagram.
 2. Show ER diagram.
-3. Open public enquiry form.
-4. Submit a parent enquiry.
+3. Open parent login.
+4. Continue to enquiry and submit a parent enquiry.
 5. Login as admin.
 6. Open dashboard and show metrics.
 7. Open leads page and filters.

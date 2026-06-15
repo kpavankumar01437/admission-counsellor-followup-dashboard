@@ -16,7 +16,7 @@ The main objective of the project is to improve admission conversion by reducing
 
 ## Chapter 3: System Analysis
 
-- Functional requirements: login, lead CRUD, public enquiry, follow-ups, tours, analytics, notifications.
+- Functional requirements: staff login, parent email login, lead CRUD, enquiry submission, follow-ups, tours, analytics, notifications.
 - Non-functional requirements: responsive UI, secure JWT auth, role-based admin access, database integrity.
 - Use cases: parent enquiry submission, counsellor follow-up, admin monitoring, demo booking.
 

@@ -5,6 +5,7 @@ import TopBar from "./components/Layout/TopBar";
 import LoadingSpinner from "./components/Common/LoadingSpinner";
 import { useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
+import ParentLogin from "./pages/ParentLogin";
 import Dashboard from "./pages/Dashboard";
 import Leads from "./pages/Leads";
 import LeadDetail from "./pages/LeadDetail";
@@ -45,6 +46,17 @@ const AdminRoute = () => {
   return <Outlet />;
 };
 
+const ParentRoute = () => {
+  const hasParentSession = Boolean(localStorage.getItem("parentToken"));
+  const hasStaffSession = Boolean(localStorage.getItem("token"));
+
+  if (!hasParentSession && !hasStaffSession) {
+    return <Navigate to="/parent-login" replace />;
+  }
+
+  return <Outlet />;
+};
+
 const AppLayout = () => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -71,7 +83,10 @@ const App = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/enquiry" element={<Enquiry />} />
+      <Route path="/parent-login" element={<ParentLogin />} />
+      <Route element={<ParentRoute />}>
+        <Route path="/enquiry" element={<Enquiry />} />
+      </Route>
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />

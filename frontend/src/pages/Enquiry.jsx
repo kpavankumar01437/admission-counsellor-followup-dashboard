@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { CheckCircle2, School } from "lucide-react";
+import { CheckCircle2, LogOut, School } from "lucide-react";
 import { getErrorMessage, submitEnquiry } from "../services/api";
 
 const initialForm = {
@@ -15,8 +16,27 @@ const initialForm = {
   address: ""
 };
 
+const getStoredParent = () => {
+  try {
+    const stored = localStorage.getItem("parent");
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+};
+
 const Enquiry = () => {
-  const [form, setForm] = useState(initialForm);
+  const navigate = useNavigate();
+  const [parent, setParent] = useState(() => getStoredParent());
+  const [form, setForm] = useState(() => {
+    const storedParent = getStoredParent();
+    return {
+      ...initialForm,
+      parent_name: storedParent?.name || "",
+      parent_phone: storedParent?.phone || "",
+      parent_email: storedParent?.email || ""
+    };
+  });
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -30,8 +50,17 @@ const Enquiry = () => {
     const next = {};
     if (!form.parent_name.trim()) next.parent_name = "Parent name is required";
     if (!form.parent_phone.trim()) next.parent_phone = "Phone number is required";
+    if (!form.parent_email.trim()) next.parent_email = "Email is required from parent login";
     setErrors(next);
     return Object.keys(next).length === 0;
+  };
+
+  const logoutParent = () => {
+    localStorage.removeItem("parentToken");
+    localStorage.removeItem("parent");
+    setParent(null);
+    toast.success("Parent logged out");
+    navigate("/parent-login");
   };
 
   const handleSubmit = async (event) => {
@@ -78,6 +107,30 @@ const Enquiry = () => {
           </div>
         </div>
 
+        {parent ? (
+          <div className="mb-6 flex flex-col justify-between gap-3 rounded-lg border border-indigo-100 bg-indigo-50 p-4 sm:flex-row sm:items-center">
+            <div>
+              <p className="text-sm font-semibold text-indigo-900">Parent session active</p>
+              <p className="text-sm text-indigo-700">{parent.email}</p>
+            </div>
+            <button
+              type="button"
+              onClick={logoutParent}
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-indigo-200 bg-white px-3 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-100"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout Parent
+            </button>
+          </div>
+        ) : (
+          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+            Parent login is required for parents. Staff users can still preview this page.{" "}
+            <Link to="/parent-login" className="font-semibold underline">
+              Go to parent login
+            </Link>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="rounded-lg bg-white p-6 shadow-sm">
           <div className="grid gap-4 md:grid-cols-2">
             <label className="text-sm font-semibold text-slate-700">
@@ -92,7 +145,14 @@ const Enquiry = () => {
             </label>
             <label className="text-sm font-semibold text-slate-700">
               Email
-              <input type="email" value={form.parent_email} onChange={(event) => update("parent_email", event.target.value)} className={inputClass("parent_email")} />
+              <input
+                type="email"
+                value={form.parent_email}
+                onChange={(event) => update("parent_email", event.target.value)}
+                readOnly={Boolean(parent?.email)}
+                className={`${inputClass("parent_email")} ${parent?.email ? "bg-slate-100 text-slate-600" : ""}`}
+              />
+              {errors.parent_email && <span className="mt-1 block text-xs text-red-600">{errors.parent_email}</span>}
             </label>
             <label className="text-sm font-semibold text-slate-700">
               Child Name

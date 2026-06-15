@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS tour_bookings;
 DROP TABLE IF EXISTS tour_slots;
 DROP TABLE IF EXISTS follow_ups;
 DROP TABLE IF EXISTS leads;
+DROP TABLE IF EXISTS parents;
 DROP TABLE IF EXISTS counsellors;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -23,6 +24,16 @@ CREATE TABLE counsellors (
   role ENUM('counsellor', 'admin', 'centre_head') DEFAULT 'counsellor',
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE parents (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100),
+  email VARCHAR(100) UNIQUE NOT NULL,
+  phone VARCHAR(15),
+  last_login_at TIMESTAMP NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_parents_email (email)
 );
 
 CREATE TABLE leads (

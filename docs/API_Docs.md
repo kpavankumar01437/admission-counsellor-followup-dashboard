@@ -12,6 +12,7 @@ All protected routes require `Authorization: Bearer <JWT>`.
 | Method | Endpoint | Auth | Purpose |
 |---|---|---|---|
 | POST | `/auth/login` | No | Counsellor/admin login |
+| POST | `/auth/parent-login` | No | Parent email login before enquiry |
 | GET | `/auth/me` | Yes | Current user profile |
 
 Seed credentials:
