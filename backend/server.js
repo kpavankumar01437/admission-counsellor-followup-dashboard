@@ -27,6 +27,19 @@ app.use(
 
 app.use(express.json({ limit: "2mb" }));
 
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      service: "Admission Counsellor Follow-up Dashboard API",
+      message: "Backend is running. Open the frontend URL to use the dashboard.",
+      frontend_url: process.env.FRONTEND_URL || "https://frontend-beryl-seven-90.vercel.app",
+      health_url: "/api/health",
+      api_base_url: "/api"
+    }
+  });
+});
+
 app.get("/api/health", (req, res) => {
   res.json({
     success: true,
