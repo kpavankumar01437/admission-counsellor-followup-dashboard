@@ -9,7 +9,7 @@ Full-stack internship project for FirstCry Intellitots admission follow-up manag
 - Database: MySQL
 - Auth: JWT
 - AI Layer: Rule-based JavaScript
-- Deployment: Render backend + Vercel frontend + Railway MySQL
+- Deployment: Railway backend + Vercel frontend + Railway MySQL
 
 ## Features
 
@@ -94,7 +94,7 @@ Frontend runs on `http://localhost:5173`.
 
 ## Environment Variables
 
-Backend production on Render:
+Backend production:
 
 ```env
 PORT=5000
@@ -105,21 +105,19 @@ DB_NAME=railway
 DB_PORT=3306
 DB_SSL=true
 JWT_SECRET=replace_with_long_secret
-CORS_ORIGIN=https://your-vercel-app.vercel.app
+CORS_ORIGIN=https://frontend-beryl-seven-90.vercel.app
 ENABLE_NOTIFICATION_INTERVAL=true
 ```
 
 Frontend production on Vercel:
 
 ```env
-VITE_API_URL=https://your-render-app.onrender.com
+VITE_API_URL=https://admission-dashboard-backend-production.up.railway.app
 ```
 
 ## Deployment Notes
 
-- Render backend root directory: `backend`
-- Render build command: `npm install`
-- Render start command: `npm start`
+- Backend is deployed on Railway from the `backend` folder.
 - Vercel frontend root directory: `frontend`
 - Vercel build command: `npm run build`
 - Vercel output directory: `dist`
@@ -127,8 +125,9 @@ VITE_API_URL=https://your-render-app.onrender.com
 
 ## Live URLs
 
-- Frontend: `https://your-vercel-app.vercel.app`
-- Backend: `https://your-render-app.onrender.com`
+- Frontend: `https://frontend-beryl-seven-90.vercel.app`
+- Backend: `https://admission-dashboard-backend-production.up.railway.app`
+- GitHub: `https://github.com/kpavankumar01437/admission-counsellor-followup-dashboard`
 - Demo video: `TODO: add demo video link`
 
 ## Team Credits
