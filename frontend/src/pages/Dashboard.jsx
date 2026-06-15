@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { AlertTriangle, CheckCircle2, Clock, Phone, RefreshCw, Users } from "lucide-react";
+import { AlertTriangle, ArrowRight, CalendarDays, CheckCircle2, Clock, Phone, RefreshCw, Target, Users } from "lucide-react";
 import {
   getAnalyticsFunnel,
   getAnalyticsSummary,
@@ -50,6 +51,8 @@ const SummaryCard = ({ label, value, icon: Icon, tone = "indigo" }) => {
     </div>
   );
 };
+
+const humanize = (value = "") => value.toString().replace(/-/g, " ");
 
 const MarkCalledModal = ({ lead, onClose }) => {
   const queryClient = useQueryClient();
@@ -165,6 +168,8 @@ const Dashboard = () => {
   const summary = summaryQuery.data || {};
   const today = todayQuery.data || [];
   const overdue = overdueQuery.data || [];
+  const urgentLead = overdue[0] || today[0] || null;
+  const followUpQueueTotal = overdue.length + today.length;
 
   return (
     <div className="space-y-6">
@@ -187,6 +192,77 @@ const Dashboard = () => {
         <SummaryCard label="Pending Today" value={summary.pending_followups_today || 0} icon={Clock} tone="amber" />
         <SummaryCard label="Overdue" value={summary.overdue_count || 0} icon={AlertTriangle} tone={summary.overdue_count > 0 ? "red" : "indigo"} />
       </div>
+
+      <section className="rounded-lg border border-indigo-100 bg-white p-5 shadow-sm">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-stretch xl:justify-between">
+          <div className="flex-1">
+            <div className="inline-flex items-center gap-2 rounded-md bg-indigo-50 px-3 py-1.5 text-sm font-semibold text-indigo-700">
+              <Target className="h-4 w-4" />
+              Admission Command Center
+            </div>
+            <h2 className="mt-4 text-2xl font-bold text-slate-950">
+              {urgentLead ? `Next best action: call ${urgentLead.parent_name}` : "No urgent follow-ups pending"}
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+              {urgentLead
+                ? `${urgentLead.parent_name} is currently marked as ${humanize(urgentLead.status)} with ${humanize(urgentLead.priority)} priority. Open the lead, check the timeline, and log the next call outcome.`
+                : "The queue is clear for now. Use the lead list to add new enquiries, review counsellor workload, or prepare the next demo tour slots."}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {urgentLead ? (
+                <Link
+                  to={`/leads/${urgentLead.id}`}
+                  className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+                >
+                  Open urgent lead
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              ) : (
+                <Link
+                  to="/leads"
+                  className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+                >
+                  View all leads
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
+              <Link
+                to="/tours"
+                className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              >
+                <CalendarDays className="h-4 w-4" />
+                Manage tours
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3 xl:w-[580px]">
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <p className="text-sm font-semibold text-slate-600">Follow-up queue</p>
+              <p className="mt-2 text-3xl font-bold text-slate-950">{followUpQueueTotal}</p>
+              <p className="mt-1 text-xs text-slate-500">{overdue.length} overdue, {today.length} due today</p>
+            </div>
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <p className="text-sm font-semibold text-slate-600">Demo pipeline</p>
+              <p className="mt-2 text-3xl font-bold text-slate-950">{summary.demo_scheduled_count || 0}</p>
+              <p className="mt-1 text-xs text-slate-500">Tours currently scheduled</p>
+            </div>
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <p className="text-sm font-semibold text-slate-600">AI priority rules</p>
+              <p className="mt-2 text-lg font-bold text-slate-950">{summary.overdue_count > 0 ? "Refresh recommended" : "Ready"}</p>
+              <button
+                type="button"
+                onClick={() => recalcMutation.mutate()}
+                disabled={recalcMutation.isPending}
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800"
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                Run AI rules
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="grid gap-6 xl:grid-cols-2">
         <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
