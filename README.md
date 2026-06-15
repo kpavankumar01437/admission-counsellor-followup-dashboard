@@ -125,10 +125,13 @@ VITE_API_URL=https://admission-dashboard-backend-production.up.railway.app
 
 ## Live URLs
 
-- Frontend: `https://frontend-beryl-seven-90.vercel.app`
+- Public parent portal: `https://frontend-beryl-seven-90.vercel.app`
+- Private staff login: `https://frontend-beryl-seven-90.vercel.app/staff-login`
 - Backend: `https://admission-dashboard-backend-production.up.railway.app`
 - GitHub: `https://github.com/kpavankumar01437/admission-counsellor-followup-dashboard`
 - Demo video: `TODO: add demo video link`
+
+Do not publish the private staff login link on parent-facing pages. Staff access is still protected by JWT login credentials.
 
 ## Team Credits
 

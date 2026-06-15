@@ -8,7 +8,8 @@ Project: Admission Counsellor Follow-up Dashboard
 
 | Item | URL |
 |---|---|
-| Frontend | `https://frontend-beryl-seven-90.vercel.app` |
+| Public parent portal | `https://frontend-beryl-seven-90.vercel.app` |
+| Private staff login | `https://frontend-beryl-seven-90.vercel.app/staff-login` |
 | Backend API | `https://admission-dashboard-backend-production.up.railway.app` |
 | Backend health check | `https://admission-dashboard-backend-production.up.railway.app/api/health` |
 | GitHub repository | `https://github.com/kpavankumar01437/admission-counsellor-followup-dashboard` |
@@ -24,8 +25,10 @@ Project: Admission Counsellor Follow-up Dashboard
 Parent login is email-based for the prototype. Any valid email can be used on:
 
 ```text
-https://frontend-beryl-seven-90.vercel.app/parent-login
+https://frontend-beryl-seven-90.vercel.app
 ```
+
+The private staff login URL is for internal sharing only and is not linked from the public parent portal.
 
 ## Deployed Services
 

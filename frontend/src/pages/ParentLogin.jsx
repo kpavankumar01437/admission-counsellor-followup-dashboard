@@ -148,11 +148,9 @@ const ParentLogin = () => {
 
           <div className="mt-5 flex items-center justify-between text-sm">
             <Link to="/" className="font-semibold text-slate-500 hover:text-slate-700">
-              Choose portal
+              Parent home
             </Link>
-            <Link to="/login" className="font-semibold text-indigo-700 hover:text-indigo-800">
-              Staff login
-            </Link>
+            <span className="text-slate-400">Staff access is private</span>
           </div>
 
           <div className="mt-3 flex justify-end text-sm">

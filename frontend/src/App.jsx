@@ -36,7 +36,7 @@ const ProtectedRoute = () => {
   }
 
   if (!token) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/staff-login" replace />;
   }
 
   return <Outlet />;
@@ -87,7 +87,8 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<PortalChoice />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<Navigate to="/" replace />} />
+      <Route path="/staff-login" element={<Login />} />
       <Route path="/parent-login" element={<ParentLogin />} />
       <Route element={<ParentRoute />}>
         <Route path="/enquiry" element={<Enquiry />} />

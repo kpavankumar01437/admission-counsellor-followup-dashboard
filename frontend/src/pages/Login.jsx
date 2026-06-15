@@ -122,11 +122,9 @@ const Login = () => {
 
           <div className="mt-5 flex items-center justify-between text-sm">
             <Link to="/" className="font-semibold text-slate-500 hover:text-slate-700">
-              Choose portal
+              Public parent portal
             </Link>
-            <Link to="/parent-login" className="font-semibold text-indigo-700 hover:text-indigo-800">
-              Parent login
-            </Link>
+            <span className="font-semibold text-slate-500">Staff-only access</span>
           </div>
         </form>
       </section>
