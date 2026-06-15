@@ -4,6 +4,7 @@ import Sidebar from "./components/Layout/Sidebar";
 import TopBar from "./components/Layout/TopBar";
 import LoadingSpinner from "./components/Common/LoadingSpinner";
 import { useAuth } from "./context/AuthContext";
+import PortalChoice from "./pages/PortalChoice";
 import Login from "./pages/Login";
 import ParentLogin from "./pages/ParentLogin";
 import Dashboard from "./pages/Dashboard";
@@ -85,6 +86,7 @@ const AppLayout = () => {
 const App = () => {
   return (
     <Routes>
+      <Route path="/" element={<PortalChoice />} />
       <Route path="/login" element={<Login />} />
       <Route path="/parent-login" element={<ParentLogin />} />
       <Route element={<ParentRoute />}>
@@ -93,7 +95,6 @@ const App = () => {
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/leads" element={<Leads />} />
           <Route path="/leads/:id" element={<LeadDetail />} />
@@ -106,7 +107,7 @@ const App = () => {
           </Route>
         </Route>
       </Route>
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

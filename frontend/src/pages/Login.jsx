@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Eye, EyeOff, Lock, School } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
@@ -119,6 +119,15 @@ const Login = () => {
           <p className="mt-4 rounded-md bg-slate-50 p-3 text-xs text-slate-500">
             Admin: admin@firstcryintellitots.com / Admin@123
           </p>
+
+          <div className="mt-5 flex items-center justify-between text-sm">
+            <Link to="/" className="font-semibold text-slate-500 hover:text-slate-700">
+              Choose portal
+            </Link>
+            <Link to="/parent-login" className="font-semibold text-indigo-700 hover:text-indigo-800">
+              Parent login
+            </Link>
+          </div>
         </form>
       </section>
     </div>
