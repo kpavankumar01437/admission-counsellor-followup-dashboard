@@ -21,7 +21,7 @@ const StatusBadge = ({ value, type = "status" }) => {
   const label = value ? String(value).replace(/-/g, " ") : "unassigned";
 
   return (
-    <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${classes[value] || fallback}`}>
+    <span className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold leading-4 capitalize ${classes[value] || fallback}`}>
       {label}
     </span>
   );

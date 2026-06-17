@@ -187,14 +187,14 @@ const LeadDetail = () => {
 
       <section className="grid gap-6 xl:grid-cols-3">
         <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm xl:col-span-2">
-          <div className="flex flex-col justify-between gap-4 md:flex-row">
+          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
             <div>
               <h2 className="text-2xl font-bold text-slate-950">{lead.parent_name}</h2>
               <p className="mt-1 text-slate-500">
                 {lead.child_name || "Child"} {lead.child_age ? `- ${lead.child_age} years` : ""} | {lead.program_interest || "Program not set"}
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center gap-2 md:justify-end">
               <StatusBadge value={lead.status} />
               <StatusBadge value={lead.priority} type="priority" />
             </div>
