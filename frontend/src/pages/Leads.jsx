@@ -151,8 +151,8 @@ const Leads = () => {
       </div>
 
       <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
-          <div className="relative xl:col-span-2">
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-12">
+          <div className="relative xl:col-span-3">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input
               value={filters.search}
@@ -161,14 +161,14 @@ const Leads = () => {
               className="w-full rounded-md border border-slate-300 py-2 pl-9 pr-3 text-sm outline-none focus:border-indigo-500"
             />
           </div>
-          <select value={filters.status} onChange={(event) => updateFilter("status", event.target.value)} className="rounded-md border border-slate-300 px-3 py-2 text-sm">
+          <select value={filters.status} onChange={(event) => updateFilter("status", event.target.value)} className="rounded-md border border-slate-300 px-3 py-2 text-sm xl:col-span-2">
             {statuses.map((status) => (
               <option key={status || "all"} value={status}>
                 {status ? status.replace(/-/g, " ") : "All statuses"}
               </option>
             ))}
           </select>
-          <select value={filters.priority} onChange={(event) => updateFilter("priority", event.target.value)} className="rounded-md border border-slate-300 px-3 py-2 text-sm">
+          <select value={filters.priority} onChange={(event) => updateFilter("priority", event.target.value)} className="rounded-md border border-slate-300 px-3 py-2 text-sm xl:col-span-2">
             {priorities.map((priority) => (
               <option key={priority || "all"} value={priority}>
                 {priority || "All priorities"}
@@ -179,7 +179,7 @@ const Leads = () => {
             <select
               value={filters.counsellor_id}
               onChange={(event) => updateFilter("counsellor_id", event.target.value)}
-              className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+              className="rounded-md border border-slate-300 px-3 py-2 text-sm xl:col-span-2"
             >
               <option value="">All counsellors</option>
               {(counsellorsQuery.data || []).map((counsellor) => (
@@ -189,8 +189,26 @@ const Leads = () => {
               ))}
             </select>
           )}
-          <input type="date" value={filters.date_from} onChange={(event) => updateFilter("date_from", event.target.value)} className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
-          <input type="date" value={filters.date_to} onChange={(event) => updateFilter("date_to", event.target.value)} className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+          <div className="grid gap-2 sm:grid-cols-2 xl:col-span-3">
+            <label className="block">
+              <span className="mb-1 block text-xs font-semibold uppercase text-slate-400">From date</span>
+              <input
+                type="date"
+                value={filters.date_from}
+                onChange={(event) => updateFilter("date_from", event.target.value)}
+                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+              />
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-xs font-semibold uppercase text-slate-400">To date</span>
+              <input
+                type="date"
+                value={filters.date_to}
+                onChange={(event) => updateFilter("date_to", event.target.value)}
+                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+              />
+            </label>
+          </div>
         </div>
       </section>
 
