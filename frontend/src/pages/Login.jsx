@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { Eye, EyeOff, Lock, School } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { getErrorMessage } from "../services/api";
-
+ 
 const Login = () => {
   const { login, token } = useAuth();
   const navigate = useNavigate();
@@ -14,11 +14,11 @@ const Login = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
+ 
   if (token) {
     return <Navigate to="/dashboard" replace />;
   }
-
+ 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -32,7 +32,7 @@ const Login = () => {
       setLoading(false);
     }
   };
-
+ 
   return (
     <div className="grid min-h-screen bg-slate-50 lg:grid-cols-2">
       <section className="hidden bg-slate-900 p-12 text-white lg:flex lg:flex-col lg:justify-between">
@@ -45,7 +45,7 @@ const Login = () => {
             <p className="text-sm text-slate-300">Admission follow-up system</p>
           </div>
         </div>
-
+ 
         <div className="max-w-md">
           <div className="mb-8 grid grid-cols-2 gap-4">
             {["Enquiry", "Demo", "Follow-up", "Admission"].map((stage) => (
@@ -60,10 +60,10 @@ const Login = () => {
             Counsellors get reminders, centre heads get accountability, and parents get timely follow-up.
           </p>
         </div>
-
+ 
         <p className="text-sm text-slate-400">Internship Project | Aurora Deemed University x NIAT</p>
       </section>
-
+ 
       <section className="flex items-center justify-center p-6">
         <form onSubmit={handleSubmit} className="w-full max-w-md rounded-lg bg-white p-8 shadow-sm">
           <div className="mb-8 text-center">
@@ -73,7 +73,7 @@ const Login = () => {
             <h2 className="text-2xl font-bold text-slate-950">Counsellor Login</h2>
             <p className="mt-2 text-sm text-slate-500">Enter your registered email and password to continue.</p>
           </div>
-
+ 
           <label className="block text-sm font-semibold text-slate-700" htmlFor="email">
             Email
           </label>
@@ -86,7 +86,7 @@ const Login = () => {
             className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
             required
           />
-
+ 
           <label className="mt-5 block text-sm font-semibold text-slate-700" htmlFor="password">
             Password
           </label>
@@ -109,7 +109,7 @@ const Login = () => {
               {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </button>
           </div>
-
+ 
           <button
             type="submit"
             disabled={loading}
@@ -117,7 +117,7 @@ const Login = () => {
           >
             {loading ? "Signing in..." : "Login"}
           </button>
-
+ 
           <div className="mt-5 flex items-center justify-between text-sm">
             <Link to="/" className="font-semibold text-slate-500 hover:text-slate-700">
               Public parent portal
@@ -129,5 +129,5 @@ const Login = () => {
     </div>
   );
 };
-
+ 
 export default Login;
