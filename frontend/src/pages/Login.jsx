@@ -9,8 +9,8 @@ const Login = () => {
   const { login, token } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    email: "admin@firstcryintellitots.com",
-    password: "Admin@123"
+    email: "",
+    password: ""
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -71,7 +71,7 @@ const Login = () => {
               <Lock className="h-7 w-7" />
             </div>
             <h2 className="text-2xl font-bold text-slate-950">Counsellor Login</h2>
-            <p className="mt-2 text-sm text-slate-500">Use the seeded admin account to start testing.</p>
+            <p className="mt-2 text-sm text-slate-500">Enter your registered email and password to continue.</p>
           </div>
 
           <label className="block text-sm font-semibold text-slate-700" htmlFor="email">
@@ -82,6 +82,7 @@ const Login = () => {
             type="email"
             value={form.email}
             onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+            placeholder="Enter your email address"
             className="mt-2 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
             required
           />
@@ -95,6 +96,7 @@ const Login = () => {
               type={showPassword ? "text" : "password"}
               value={form.password}
               onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
+              placeholder="Enter your password"
               className="w-full rounded-md border border-slate-300 px-3 py-2 pr-10 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
               required
             />
@@ -115,10 +117,6 @@ const Login = () => {
           >
             {loading ? "Signing in..." : "Login"}
           </button>
-
-          <p className="mt-4 rounded-md bg-slate-50 p-3 text-xs text-slate-500">
-            Admin: admin@firstcryintellitots.com / Admin@123
-          </p>
 
           <div className="mt-5 flex items-center justify-between text-sm">
             <Link to="/" className="font-semibold text-slate-500 hover:text-slate-700">
