@@ -51,7 +51,7 @@ const Sidebar = ({ open, onClose, onOpen }) => {
               <School className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-sm font-bold">FirstCry Intellitots</p>
+              <p className="text-sm font-bold">Crownridge LLP</p>
               <p className="text-xs text-slate-400">Admissions CRM</p>
             </div>
           </div>
