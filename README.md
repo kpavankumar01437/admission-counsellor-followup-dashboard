@@ -1,6 +1,6 @@
 # Admission Counsellor Follow-up Dashboard
 
-Full-stack internship project for FirstCry Intellitots admission follow-up management.
+Full-stack internship project for Crownridge LLP admission follow-up management.
 
 ## Tech Stack
 
